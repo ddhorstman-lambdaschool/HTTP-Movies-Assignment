@@ -7,18 +7,20 @@ export default function MovieForm({ triggerUpdate }) {
   const params = useParams();
   const history = useHistory();
 
-  useEffect(() => {
-    (function fetchMovie() {
-      axios
-        .get(`http://localhost:5000/api/movies/${params.id}`)
-        .then(res => setMovie(res.data))
-        .catch(err => console.log(err.response));
-    })();
-  }, [params.id]);
-
   const cancelEditing = () => {
     history.push(`/movies/${params.id}`);
   };
+
+  const fetchMovie = () => {
+    axios
+      .get(`http://localhost:5000/api/movies/${params.id}`)
+      .then(res => setMovie(res.data))
+      .catch(err => console.log(err.response));
+  };
+
+  useEffect(() => {
+    fetchMovie();
+  }, [params.id]);
 
   const deleteMovie = () => {
     axios
@@ -35,27 +37,46 @@ export default function MovieForm({ triggerUpdate }) {
       [name]: value,
     });
   };
-  const updateStar = idx => (e) => {
-      e.preventDefault();
+  const updateStar = idx => e => {
+    e.preventDefault();
     setMovie({
       ...movie,
       stars: movie.stars.map((x, i) => (i !== idx ? x : e.target.value)),
     });
   };
-  const deleteStar = ({target:{value}}) => {
-    console.log({
+  const deleteStar = idx => () => {
+    setMovie({
       ...movie,
-      stars: movie.stars.filter(x => x !== value),
+      stars: movie.stars.filter((x, i) => idx !== i),
     });
-    //debugger;
   };
+
+  const addStar = () => {
+    setMovie({
+      ...movie,
+      stars: movie.stars.concat([""]),
+    });
+  };
+
+  const handleSubmit = e => {
+    e.preventDefault();
+  };
+  const handleReset = e => {
+    e.preventDefault();
+    fetchMovie();
+  };
+
   if (!movie) {
     return <div>Loading movie information...</div>;
   }
 
   return (
     <div className="save-wrapper">
-      <form className="movie-card movie-edit-form">
+      <form
+        className="movie-card movie-edit-form"
+        onSubmit={handleSubmit}
+        onReset={handleReset}
+      >
         <h2>Editing movie info</h2>
         <label>
           Title:
@@ -82,6 +103,7 @@ export default function MovieForm({ triggerUpdate }) {
           ></input>
         </label>
         <h3>Stars:</h3>
+        <button onClick={addStar}>Add Star</button>
         {movie.stars.map((star, idx) => (
           <label key={idx}>
             <input
@@ -89,9 +111,13 @@ export default function MovieForm({ triggerUpdate }) {
               onChange={updateStar(idx)}
               value={star}
             ></input>
-            <button onClick={deleteStar}>Delete</button>
+            <button onClick={deleteStar(idx)}>Delete</button>
           </label>
         ))}
+        <div className = "form-buttons">
+          <input className="button" type="submit" />
+          <input className="button" type="reset" />
+        </div>
       </form>
       <div className="button delete-button" onClick={deleteMovie}>
         Delete Item

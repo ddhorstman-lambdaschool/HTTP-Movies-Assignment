@@ -94,8 +94,17 @@ body {
 .movie-edit-form {
   display:flex;
   flex-flow: column nowrap;
+  align-items: flex-start;
   label {
     font-weight: bold;
+  }
+}
+
+.form-buttons {
+  padding-top:10px;
+  & > *:hover {
+    background-color: darkgrey;
+    color: white;
   }
 }
 
