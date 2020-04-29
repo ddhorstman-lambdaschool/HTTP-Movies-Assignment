@@ -56,6 +56,10 @@ body {
 .button {
   border: 1px solid grey;
   padding: 5px 10px;
+  &:hover {
+    background-color: darkgrey;
+    color: white;
+  }
 }
 
 .save-button {
@@ -92,20 +96,16 @@ body {
 }
 
 .movie-edit-form {
-  display:flex;
+  display: flex;
   flex-flow: column nowrap;
   align-items: flex-start;
-  label {
-    font-weight: bold;
-  }
 }
-
+.star-entry {
+  display: flex;
+  flex-flow: row nowrap;
+}
 .form-buttons {
-  padding-top:10px;
-  & > *:hover {
-    background-color: darkgrey;
-    color: white;
-  }
+  padding-top: 10px;
 }
 
 .home-button {
