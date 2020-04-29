@@ -83,7 +83,7 @@ export default function MovieForm({ triggerUpdate }) {
         onSubmit={handleSubmit}
         onReset={handleReset}
       >
-        <h2>Editing movie info</h2>
+        <h2>{`Editing ${movie.title}`}</h2>
         <label>
           Title:
           <input
