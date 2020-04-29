@@ -109,9 +109,9 @@ export default function MovieForm({ triggerUpdate }) {
           ></input>
         </label>
         <h3>Stars:</h3>
-        <div className="button form-button" onClick={addStar}>
+        <button type="button" className="button form-button" onClick={addStar}>
           Add Star
-        </div>
+        </button>
         {movie.stars.map((star, idx) => (
           <label key={idx} className="star-entry">
             <input
@@ -119,9 +119,9 @@ export default function MovieForm({ triggerUpdate }) {
               onChange={updateStar(idx)}
               value={star}
             ></input>
-            <div className="button" onClick={deleteStar(idx)}>
+            <button type="button" className="button" onClick={deleteStar(idx)}>
               Delete
-            </div>
+            </button>
           </label>
         ))}
         <div className="form-buttons">
