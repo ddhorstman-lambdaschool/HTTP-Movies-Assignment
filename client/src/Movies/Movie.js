@@ -3,38 +3,27 @@ import axios from "axios";
 import { useParams, useHistory } from "react-router-dom";
 import MovieCard from "./MovieCard";
 
-function Movie({ addToSavedList, triggerUpdate }) {
+function Movie({ addToSavedList }) {
   const [movie, setMovie] = useState(null);
-  const [editing, setEditing] = useState(false);
   const params = useParams();
   const history = useHistory();
 
-  const toggleEditMode = () => {
-    setEditing(!editing);
-  };
-
-  const fetchMovie = () => {
-    axios
-      .get(`http://localhost:5000/api/movies/${params.id}`)
-      .then(res => setMovie(res.data))
-      .catch(err => console.log(err.response));
-  };
+  useEffect(() => {
+    (function fetchMovie() {
+      axios
+        .get(`http://localhost:5000/api/movies/${params.id}`)
+        .then(res => setMovie(res.data))
+        .catch(err => console.log(err.response));
+    })();
+  }, [params.id]);
 
   const saveMovie = () => {
     addToSavedList(movie);
   };
 
-  const deleteMovie = () => {
-    axios
-      .delete(`http://localhost:5000/api/movies/${params.id}`)
-      .then(console.log)
-      .then(() => triggerUpdate())
-      .then(() => history.push("/"))
-      .catch(console.error);
+  const editMovie = () => {
+    history.push(`/update-movie/${params.id}`);
   };
-  useEffect(() => {
-    fetchMovie();
-  }, [params.id]);
 
   if (!movie) {
     return <div>Loading movie information...</div>;
@@ -43,17 +32,12 @@ function Movie({ addToSavedList, triggerUpdate }) {
   return (
     <div className="save-wrapper">
       <MovieCard movie={movie} />
-      {!editing ? (
-        <div className="button save-button" onClick={saveMovie}>
-          Save
-        </div>
-      ) : (
-        <div className="button delete-button" onClick={deleteMovie}>
-          Delete
-        </div>
-      )}
-      <div className="button edit-button" onClick={toggleEditMode}>
-        {editing ? "Cancel" : "Edit"}
+      <div className="button save-button" onClick={saveMovie}>
+        Save to list
+      </div>
+
+      <div className="button edit-button" onClick={editMovie}>
+        Edit
       </div>
     </div>
   );

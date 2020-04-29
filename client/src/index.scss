@@ -91,6 +91,14 @@ body {
   }
 }
 
+.movie-edit-form {
+  display:flex;
+  flex-flow: column nowrap;
+  label {
+    font-weight: bold;
+  }
+}
+
 .home-button {
   padding: 5px 10px;
   background-color: lightskyblue;
